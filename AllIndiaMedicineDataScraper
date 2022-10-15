@@ -1,0 +1,94 @@
+##It was created to scrap real data of all medicines India for Analysis Purpose.
+##I had to run it on Kali Linux with Proxy Chaining and Tor Service to bypass the Captcha Verification asked to the automator.
+
+
+from selenium import webdriver
+from bs4 import BeautifulSoup
+import csv
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+links=[]
+# with open('BRANDLINKS.csv', newline='') as f:
+#     reader = csv.reader(f)
+#     data = list(reader)
+# for i in data:
+#     for j in i:
+#         links.append(j)
+# y=0
+# for i in links:
+#     Final = []
+#     l=[]
+url = 'MaiNahiBataunga.html'
+# options = FirefoxOptions()
+# options.add_argument("--headless")
+# driver = webdriver.Firefox(options=options)
+# driver = webdriver.Firefox()
+driver = webdriver.Firefox()
+driver.get(url)
+html = driver.page_source
+soup = BeautifulSoup(html, 'html.parser')
+soup = str(soup)
+x=soup[soup.find('<h1 style="display:inline; ">')+29:]
+Name=x[:x.find('</h1>')].strip()
+# l.append(Name)
+# print(Name) #Name of Medicine
+
+Medicine_Type=x[x.find('<span style="font-size:234px">')+29:]
+Medicine_Type=Medicine_Type[:Medicine_Type.find('</span>')].strip()
+# l.append(Medicine_Type)
+# print(Medicine_Type) #Medicine Type
+
+Brand=x[x.find('<span style="font-size:2523px;">')+30:]
+Brand=Brand[Brand.find('>')+1:]
+Brand=Brand[:Brand.find('</a>')].strip()#BrandName
+# l.append(Brand)
+# print(Brand)
+
+Generic=x[x.find('<b>Generic :</b>')+29:]
+Generic=Generic[:Generic.find('<')].strip()
+# l.append(Generic)
+# print(Generic.strip(' ')) #Generic
+
+Price=x[x.find('<b style="color:#000000; font-size:5px">')+41:]
+Price=Price[:Price.find('</b>')].strip()
+# l.append(Price)
+# print(Price) #Price
+
+Power=x[x.find('<span style="font-size:23px; padding:32px;"><b>')+79:]
+Power=Power[:Power.find('</b>')].strip()
+# l.append(Power)
+# print(Power)
+
+Quantity=x[x.find('<span style="font-size:13px; padding:21px;"> <b>')+47:]
+Quantity=Quantity[:Quantity.find('</span>')].strip()
+# l.append(Quantity)
+# print(Quantity) #Quantity
+Combination=''
+if x.find('Combination of Generics :')!=-1:
+    print(x.find('Combination of Generics :'))
+    x=x[x.find('Combination of Generics :')+30:]
+    Combination=x[:x.find('</div>')]
+    print(Combination)
+# Final.append(l)
+
+# if '<' in Name or '>' in Name or '<' in Brand or  '>' in Brand or '<' in Medicine_Type or  '>' in Medicine_Type or '<' in Generic or  '>' in Generic or '<' in Power or  '>' in Power or '<' in Quantity or  '>' in Quantity or '<' in Price or  '>' in Price :
+#     print('Enter Captcha or Check if the limit is not exceeded')
+#     print('Check if need to Change Network and delete' ,y, 'rows from top of BRANKLINKS.csv')
+#     print('and Run main.exe again')
+#     driver = webdriver.Firefox()
+#     driver.get(url)
+#     wait=input()
+#     break
+print(Name)
+print(Medicine_Type)
+print(Brand)
+print(Generic)
+print(Price)
+print(Power)
+print(Quantity)
+# with open('DATA.csv', 'a+', newline='') as file:
+#     y+=1
+#     write = csv.writer(file)
+#     write.writerows(Final)
+#     print(y, 'Data Copied in DATA.csv')
+# driver.close()
+
