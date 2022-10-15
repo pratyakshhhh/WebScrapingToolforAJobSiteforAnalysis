@@ -1,0 +1,103 @@
+import requests
+from bs4 import BeautifulSoup
+import csv
+url1 = 'hidden'
+print('Importing Links')
+r = requests.get(url1)
+c = []
+d = []
+f = []
+htmlContent = r.content
+soup = BeautifulSoup(htmlContent, 'html.parser')
+paras = soup.find_all('a')
+a = str(paras).split(',')
+for i in a:
+        c.append(i.split('>'))
+
+for i in c:
+        d.append(i[0].strip("<a"))
+
+for i in d:
+        f.append(i[6:-1])
+
+links = []
+for i in f:
+        if i.startswith('/rev/'):
+                links.append(i)
+
+print('Links Imported')
+Final=[]
+print('Importing Data')
+for i in links:
+        l = []
+        url2='https://www.hidden.hidden'+i
+        r = requests.get(url2)
+        htmlContent = r.content
+        soup = BeautifulSoup(htmlContent, 'html.parser')
+        html=soup.prettify()
+        #name start
+        a=html.find('<h1 itesfsdf">')
+        a=html[a:]
+        b=a.find('>')
+        a=a[b+1:]
+        b=a.find('<')
+        name=a[:b].strip('\n ')
+        l.append(name)
+        #name end
+
+        #Address Start
+        a=html.find('<span sdfg="street_____==Address">')
+        a=html[a:]
+        b=a.find('>')
+        a=a[b+1:]
+        b=a.find('<')
+        street=a[:b].strip(' \n')
+        a=html.find('<span wetw="addres__-Locality">')
+        a=html[a:]
+        b=a.find('>')
+        a=a[b+1:]
+        b=a.find('<')
+        locality=a[:b].strip(' \n')
+        a=html.find('<span vcxwa="postalC__dode">')
+        a=html[a:]
+        b=a.find('>')
+        a=a[b+1:]
+        b=a.find('<')
+        postalcode=a[:b].strip(' \n')
+
+        a=html.find('<span etwwet="addre____ssRegion">')
+        a=html[a:]
+        b=a.find('>')
+        a=a[b+1:]
+        b=a.find('<')
+        region=a[:b].strip(' \n')
+        fad=street+' '+locality+' '+postalcode+' '+region
+        l.append(fad)
+        #Address End
+
+        #Telephone Start
+        a=html.find('<span itemprop="tele__phonebaby!">')
+        a=html[a:]
+        b=a.find('>')
+        a=a[b+1:]
+        b=a.find('<')
+        telephone=a[:b].strip('\n ')
+        l.append(telephone)
+        #Telephone End
+
+        #Fax Start
+        a=html.find('<span itemprop="fax___Number">')
+        a=html[a:]
+        b=a.find('>')
+        a=a[b+1:]
+        b=a.find('<')
+        fax=a[:b].strip('\n ')
+        l.append(fax)
+        Final.append(l)
+        print(len(Final), "Data Imported")
+print('Data Imported')
+print('Writing Data to Data.csv')
+with open('Data.csv', 'w+', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerows(Final)
+print('Data Copied')
